@@ -1,6 +1,13 @@
 # LibreSpeed (Go port)
 This is a Golang Port from the original PHP-based [LibreSpeed](https://github.com/librespeed/speedtest)
 
+## Build
+
+```bash
+go generate
+go build -o speedtest main.go
+```
+
 ## Installation
 For any instructions and support please check out the [Wiki](https://github.com/librespeed/speedtest/wiki)
 
