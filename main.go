@@ -3,7 +3,7 @@ package main
 //go:generate statik -src=./public
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -19,11 +19,20 @@ func empty(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Cache-Control", "post-check=0, pre-check=0")
 		w.Header().Set("Pragma", "no-cache")
 	}
-	_, _ = ioutil.ReadAll(r.Body)
+	b := make([]byte, 1<<20)
+	for {
+		_, e := r.Body.Read(b)
+		if e == io.EOF || e == io.ErrUnexpectedEOF {
+			break
+		} else if e != nil {
+			panic(e)
+		}
+	}
+	defer r.Body.Close()
 	w.WriteHeader(200)
 }
 
-var garbageBuf []byte
+var garbageBuf []byte = make([]byte, 1<<20)
 
 func garbage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
@@ -34,15 +43,19 @@ func garbage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Disposition", "attachment; filename=random.dat")
 	w.Header().Set("Content-Transfer-Encoding", "binary")
 
-	reqSize := 100
+	chunks := 4
 	if ckSize := r.FormValue("ckSize"); ckSize != "" {
 		if iSize, err := strconv.ParseInt(ckSize, 10, 32); err == nil {
-			reqSize = int(iSize)
+			if iSize > 1024 {
+				chunks = 1024
+			} else {
+				chunks = int(iSize)
+			}
 		}
 	}
 
 	w.WriteHeader(200)
-	for i := 0; i < reqSize; i++ {
+	for i := 0; i < chunks; i++ {
 		w.Write(garbageBuf)
 	}
 }
@@ -56,8 +69,6 @@ func do() error {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	garbageBuf = make([]byte, 1<<20)
 
 	http.HandleFunc("/empty", empty)
 	http.HandleFunc("/garbage", garbage)

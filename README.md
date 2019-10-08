@@ -4,6 +4,7 @@ This is a Golang Port from the original PHP-based [LibreSpeed](https://github.co
 ## Build
 
 ```bash
+go get github.com/rakyll/statik
 go generate
 go build -o speedtest main.go
 ```
