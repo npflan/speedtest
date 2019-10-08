@@ -12,7 +12,7 @@ COPY main.go .
 
 # Build static binary
 RUN go generate
-RUN GOOS=linux GOARCH=amd64 go build -ldflags '-w -s' -o speedtest main.go
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -ldflags '-w -s' -o speedtest main.go
 
 ENTRYPOINT ["/app/speedtest"]
 
