@@ -111,7 +111,7 @@ function initUI(){
 <style type="text/css">
 	html,body{
 		border:none; padding:0; margin:0;
-		background:#FFFFFF;
+		background:#002B36;
 		color:#202020;
 	}
 	body{
@@ -124,9 +124,9 @@ function initUI(){
 	#startStopBtn{
 		display:inline-block;
 		margin:0 auto;
-		color:#6060AA;
+		color:#00aeef;
 		background-color:rgba(0,0,0,0);
-		border:0.15em solid #6060FF;
+		border:0.15em solid #00aeef;
 		border-radius:0.3em;
 		transition:all 0.3s;
 		box-sizing:border-box;
@@ -217,23 +217,36 @@ function initUI(){
 			font-size:0.8em;
 		}
 	}
+	div.testName {
+    color: #00aeef;
+	}
+
+	div.unit, div.meterText, span#ip {
+		color: #faa31d;
+	}
+
+	.logo {
+		max-width: 100%;
+		max-height: 100vh;
+		margin: auto;
+    }
 </style>
-<title>LibreSpeed Example</title>
+<title>NPF Speedtest</title>
 </head>
 <body>
-<h1>LibreSpeed Example</h1>
+<div class="logo-container"><img class="logo" src="./npf-speedtest.png" alt="logo"></div>
 <div id="testWrapper">
 	<div id="startStopBtn" onclick="startStop()"></div>
 	<div id="test">
         <div class="testGroup">
 			<div class="testArea2">
 				<div class="testName">Ping</div>
-				<div id="pingText" class="meterText" style="color:#AA6060"></div>
+				<div id="pingText" class="meterText"></div>
 				<div class="unit">ms</div>
 			</div>
 			<div class="testArea2">
 				<div class="testName">Jitter</div>
-				<div id="jitText" class="meterText" style="color:#AA6060"></div>
+				<div id="jitText" class="meterText"></div>
 				<div class="unit">ms</div>
 			</div>
 		</div>
